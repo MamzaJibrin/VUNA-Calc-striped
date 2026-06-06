@@ -1,4 +1,5 @@
 const CI = process.argv.includes("--ci");
+const COVERAGE = process.argv.includes("--coverage");
 
 let playwright;
 try {
@@ -9,7 +10,7 @@ try {
 }
 
 import { createServer } from "http";
-import { readFileSync } from "fs";
+import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join, extname } from "path";
 
 const PORT = 8765;
@@ -61,6 +62,8 @@ try {
   const page = await browser.newPage();
   page.on("pageerror", (err) => console.log("  [error]", err.message));
 
+  if (COVERAGE) await page.coverage.startJSCoverage();
+
   await page.goto(`http://localhost:${PORT}/`, { waitUntil: "load", timeout: 10000 });
 
   // Poll DOM for QUnit results instead of using QUnit.done callback
@@ -84,6 +87,26 @@ try {
 
   console.log(`\n  Passed: ${result.passed}  |  Failed: ${result.failed}  |  Total: ${result.total}  |  ${result.runtime}ms`);
   passed = result.failed === 0;
+
+  if (COVERAGE) {
+    const coverage = await page.coverage.stopJSCoverage();
+    const totalBytes = coverage.reduce((s, e) => s + e.text.length, 0);
+    const usedBytes = coverage.reduce((s, e) => {
+      let used = 0;
+      for (const range of e.ranges) used += range.end - range.start;
+      return s + used;
+    }, 0);
+    const pct = totalBytes ? ((usedBytes / totalBytes) * 100).toFixed(1) : "0.0";
+    console.log(`\n  JS Coverage: ${pct}% (${usedBytes}/${totalBytes} bytes)`);
+    coverage.forEach((entry) => {
+      let used = 0;
+      for (const r of entry.ranges) used += r.end - r.start;
+      const filePct = entry.text.length ? ((used / entry.text.length) * 100).toFixed(1) : "0.0";
+      console.log(`    ${entry.url}: ${filePct}%`);
+    });
+    mkdirSync("coverage", { recursive: true });
+    writeFileSync("coverage/coverage-raw.json", JSON.stringify(coverage, null, 2));
+  }
 
   if (!passed) {
     const failures = await page.evaluate(() => {

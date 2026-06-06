@@ -8,11 +8,13 @@
     "lint:js": "eslint assets/js/ tests/runner.mjs",
     "lint:css": "stylelint assets/css/",
     "test": "node tests/runner.mjs",
-    "test:ci": "node tests/runner.mjs --ci"
+    "test:ci": "node tests/runner.mjs --ci",
+    "coverage": "node tests/runner.mjs --ci --coverage"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@playwright/test": "^1.50.0",
+    "c8": "^11.0.0",
     "eslint": "^9.0.0",
     "globals": "^15.0.0",
     "stylelint": "^16.0.0",
