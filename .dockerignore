@@ -1,0 +1,13 @@
+node_modules
+.git
+.github
+.gitignore
+tests
+CICD_Pipeline_Lab_Manual.docx
+eslint.config.mjs
+.stylelintrc.json
+package-lock.json
+package.json
+README.md
+Dockerfile
+.dockerignore

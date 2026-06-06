@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VUNA Calculator Tests</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/qunit@2/qunit/qunit.min.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <input type="text" id="result" value="0" disabled />
+    <div id="word-display" class="word-display-area">
+      <div><span class="small-label">Hausa</span><span id="word-result"></span></div>
+      <button id="speak-btn" disabled></button>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/qunit@2/qunit/qunit.min.js"></script>
+  <script src="../assets/js/script.js"></script>
+  <script>
+    QUnit.module("calculateExpression");
+
+    QUnit.test("simple arithmetic", function (t) {
+      t.equal(calculateExpression("2+2"), 4);
+      t.equal(calculateExpression("10-3"), 7);
+      t.equal(calculateExpression("4*5"), 20);
+      t.equal(calculateExpression("15/3"), 5);
+      t.equal(calculateExpression("2+3*4"), 14);
+      t.equal(calculateExpression("(2+3)*4"), 20);
+    });
+
+    QUnit.test("decimal results", function (t) {
+      t.equal(calculateExpression("5/2"), 2.5);
+      t.equal(calculateExpression("0.1+0.2"), 0.30000000000000004);
+      t.equal(calculateExpression("3.5*2"), 7);
+    });
+
+    QUnit.test("edge cases", function (t) {
+      t.equal(calculateExpression("0"), 0);
+      t.equal(calculateExpression("-5"), -5);
+      t.equal(calculateExpression("0.5+0.5"), 1);
+    });
+
+    QUnit.test("error cases", function (t) {
+      t.equal(calculateExpression("1/0"), "Error");
+      t.equal(calculateExpression("0/0"), "Error");
+    });
+
+    QUnit.test("trig functions", function (t) {
+      t.equal(calculateExpression("sin(0)"), 0);
+      t.equal(calculateExpression("cos(0)"), 1);
+      t.equal(calculateExpression("tan(0)"), 0);
+    });
+
+    QUnit.test("power operator", function (t) {
+      t.equal(calculateExpression("2**3"), 8);
+      t.equal(calculateExpression("9**0.5"), 3);
+    });
+
+    QUnit.test("constants", function (t) {
+      t.equal(calculateExpression("pi"), Math.PI);
+      t.equal(calculateExpression("e"), Math.E);
+    });
+
+    QUnit.module("normalizeExpression");
+
+    QUnit.test("trig function normalization", function (t) {
+      t.equal(normalizeExpression("sin(30)"), "sinDeg(30)");
+      t.equal(normalizeExpression("cos(45)"), "cosDeg(45)");
+      t.equal(normalizeExpression("tan(60)"), "tanDeg(60)");
+      t.equal(normalizeExpression("asin(0.5)"), "asinDeg(0.5)");
+      t.equal(normalizeExpression("acos(0.5)"), "acosDeg(0.5)");
+      t.equal(normalizeExpression("atan(1)"), "atanDeg(1)");
+    });
+
+    QUnit.test("hyperbolic functions preserved", function (t) {
+      t.equal(normalizeExpression("sinh(0)"), "sinh(0)");
+      t.equal(normalizeExpression("asinh(0)"), "asinh(0)");
+    });
+
+    QUnit.test("constants preserved", function (t) {
+      t.equal(normalizeExpression("e"), "Math.E");
+      t.equal(normalizeExpression("pi"), "Math.PI");
+    });
+
+    QUnit.module("updateResult");
+
+    QUnit.test("updates display with currentExpression", function (t) {
+      currentExpression = "42";
+      updateResult();
+      t.equal(document.getElementById("result").value, "42");
+    });
+
+    QUnit.test("shows 0 when expression is empty", function (t) {
+      currentExpression = "";
+      updateResult();
+      t.equal(document.getElementById("result").value, "0");
+    });
+
+    QUnit.module("appendToResult / backspace / clearResult", function () {
+      QUnit.test("appendToResult appends 7", function (t) {
+        currentExpression = "";
+        appendToResult(7);
+        t.equal(currentExpression, "7");
+      });
+      QUnit.test("appendToResult appends 0", function (t) {
+        currentExpression = "";
+        appendToResult(0);
+        t.equal(currentExpression, "0");
+      });
+      QUnit.test("appendToResult appends 9", function (t) {
+        currentExpression = "";
+        appendToResult(9);
+        t.equal(currentExpression, "9");
+      });
+
+      QUnit.test("appendToResult concatenates multiple values", function (t) {
+        currentExpression = "";
+        appendToResult(1);
+        appendToResult(2);
+        appendToResult(3);
+        t.equal(currentExpression, "123");
+      });
+
+      QUnit.test("backspace removes last character", function (t) {
+        currentExpression = "123";
+        backspace();
+        t.equal(currentExpression, "12");
+      });
+
+      QUnit.test("backspace on empty does nothing", function (t) {
+        currentExpression = "";
+        backspace();
+        t.equal(currentExpression, "");
+      });
+
+      QUnit.test("clearResult resets expression", function (t) {
+        currentExpression = "123+456";
+        clearResult();
+        t.equal(currentExpression, "");
+      });
+
+      QUnit.test("clearResult after backspace", function (t) {
+        currentExpression = "5";
+        backspace();
+        clearResult();
+        t.equal(currentExpression, "");
+      });
+    });
+
+    QUnit.module("bracketToResult");
+
+    QUnit.test("appends opening bracket", function (t) {
+      currentExpression = "";
+      bracketToResult("(");
+      t.equal(currentExpression, "(");
+    });
+
+    QUnit.test("appends closing bracket", function (t) {
+      currentExpression = "";
+      bracketToResult(")");
+      t.equal(currentExpression, ")");
+    });
+
+    QUnit.test("brackets in expression", function (t) {
+      currentExpression = "";
+      bracketToResult("(");
+      appendToResult(2);
+      appendToResult(3);
+      bracketToResult(")");
+      t.equal(currentExpression, "(23)");
+    });
+
+    QUnit.module("operatorToResult");
+
+    QUnit.test("append plus operator", function (t) {
+      currentExpression = "5";
+      operatorToResult("+");
+      t.equal(currentExpression, "5+");
+    });
+
+    QUnit.test("append minus operator", function (t) {
+      currentExpression = "10";
+      operatorToResult("-");
+      t.equal(currentExpression, "10-");
+    });
+
+    QUnit.test("append multiply operator", function (t) {
+      currentExpression = "4";
+      operatorToResult("*");
+      t.equal(currentExpression, "4*");
+    });
+
+    QUnit.test("append divide operator", function (t) {
+      currentExpression = "8";
+      operatorToResult("/");
+      t.equal(currentExpression, "8/");
+    });
+
+    QUnit.test("power operator converts ^ to **", function (t) {
+      currentExpression = "2";
+      operatorToResult("^");
+      t.equal(currentExpression, "2**");
+    });
+
+    QUnit.module("percentToResult");
+
+    QUnit.test("percent of single number", function (t) {
+      currentExpression = "200";
+      percentToResult();
+      t.equal(currentExpression, "2*");
+    });
+
+    QUnit.test("percent of expression", function (t) {
+      currentExpression = "50+200";
+      percentToResult();
+      t.ok(currentExpression.endsWith("*"));
+      t.equal(currentExpression, "100*");
+    });
+
+    QUnit.test("percent on empty does nothing", function (t) {
+      currentExpression = "";
+      percentToResult();
+      t.equal(currentExpression, "");
+    });
+
+    QUnit.test("percent of zero", function (t) {
+      currentExpression = "0";
+      percentToResult();
+      t.equal(currentExpression, "0*");
+    });
+
+    QUnit.module("calculateResult");
+
+    QUnit.test("simple calculation updates display and LAST_RESULT", function (t) {
+      currentExpression = "3+4";
+      LAST_RESULT = 0;
+      calculateResult();
+      t.equal(currentExpression, "7");
+      t.equal(LAST_RESULT, "7");
+      t.equal(document.getElementById("result").value, "7");
+    });
+
+    QUnit.test("chained calculation with ans", function (t) {
+      currentExpression = "10+5";
+      LAST_RESULT = 0;
+      calculateResult();
+      t.equal(LAST_RESULT, "15");
+      currentExpression = "ans*2";
+      calculateResult();
+      t.equal(LAST_RESULT, "30");
+    });
+
+    QUnit.test("error does not update LAST_RESULT from error string", function (t) {
+      currentExpression = "1/0";
+      LAST_RESULT = 0;
+      calculateResult();
+      t.equal(LAST_RESULT, "Error");
+    });
+
+    QUnit.test("empty expression returns early", function (t) {
+      currentExpression = "";
+      calculateResult();
+      t.equal(document.getElementById("result").value, "0");
+    });
+
+    QUnit.module("triggerFunctions");
+
+    QUnit.test("clearResult then calculate is 0", function (t) {
+      appendToResult(5);
+      appendToResult(5);
+      clearResult();
+      t.equal(currentExpression, "");
+    });
+
+    QUnit.test("append after clear", function (t) {
+      appendToResult(9);
+      clearResult();
+      appendToResult(3);
+      t.equal(currentExpression, "3");
+    });
+
+    QUnit.module("convertToWords");
+
+    QUnit.test("zero", function (t) {
+      t.equal(convertToWords(0), "sifili");
+    });
+
+    QUnit.test("single digits", function (t) {
+      t.equal(convertToWords(1), "ɗaya");
+      t.equal(convertToWords(2), "biyu");
+      t.equal(convertToWords(3), "uku");
+      t.equal(convertToWords(4), "huɗu");
+      t.equal(convertToWords(5), "biyar");
+      t.equal(convertToWords(6), "shida");
+      t.equal(convertToWords(7), "bakwai");
+      t.equal(convertToWords(8), "takwas");
+      t.equal(convertToWords(9), "tara");
+    });
+
+    QUnit.test("teens (10-19)", function (t) {
+      t.equal(convertToWords(10), "goma");
+      t.equal(convertToWords(11), "goma sha ɗaya");
+      t.equal(convertToWords(12), "goma sha biyu");
+      t.equal(convertToWords(13), "goma sha uku");
+      t.equal(convertToWords(14), "goma sha huɗu");
+      t.equal(convertToWords(15), "goma sha biyar");
+      t.equal(convertToWords(16), "goma sha shida");
+      t.equal(convertToWords(17), "goma sha bakwai");
+      t.equal(convertToWords(18), "goma sha takwas");
+      t.equal(convertToWords(19), "goma sha tara");
+    });
+
+    QUnit.test("tens (20-90)", function (t) {
+      t.equal(convertToWords(20), "ashirin");
+      t.equal(convertToWords(30), "talatin");
+      t.equal(convertToWords(40), "arba'in");
+      t.equal(convertToWords(50), "hamsin");
+      t.equal(convertToWords(60), "sittin");
+      t.equal(convertToWords(70), "saba'in");
+      t.equal(convertToWords(80), "tamanin");
+      t.equal(convertToWords(90), "tsannin");
+    });
+
+    QUnit.test("compound tens", function (t) {
+      t.equal(convertToWords(21), "ashirin da ɗaya");
+      t.equal(convertToWords(34), "talatin da huɗu");
+      t.equal(convertToWords(42), "arba'in da biyu");
+      t.equal(convertToWords(99), "tsannin da tara");
+    });
+
+    QUnit.test("hundreds", function (t) {
+      t.equal(convertToWords(100), "ɗari");
+      t.equal(convertToWords(200), "ɗari biyu");
+      t.equal(convertToWords(300), "ɗari uku");
+      t.equal(convertToWords(500), "ɗari biyar");
+      t.equal(convertToWords(900), "ɗari tara");
+    });
+
+    QUnit.test("compound hundreds", function (t) {
+      t.equal(convertToWords(101), "ɗari da ɗaya");
+      t.equal(convertToWords(110), "ɗari da goma");
+      t.equal(convertToWords(111), "ɗari da goma sha ɗaya");
+      t.equal(convertToWords(125), "ɗari da ashirin da biyar");
+      t.equal(convertToWords(250), "ɗari biyu da hamsin");
+      t.equal(convertToWords(999), "ɗari tara da tsannin da tara");
+    });
+
+    QUnit.test("thousands", function (t) {
+      t.equal(convertToWords(1000), "dubu");
+      t.equal(convertToWords(2000), "biyu dubu");
+      t.equal(convertToWords(5000), "biyar dubu");
+    });
+
+    QUnit.test("compound thousands", function (t) {
+      t.equal(convertToWords(1001), "dubu da ɗaya");
+      t.equal(convertToWords(1010), "dubu da goma");
+      t.equal(convertToWords(1100), "dubu da ɗari");
+      t.equal(convertToWords(1500), "dubu da ɗari biyar");
+      t.equal(convertToWords(1234), "dubu da ɗari biyu da talatin da huɗu");
+      t.equal(convertToWords(9999), "tara dubu da ɗari tara da tsannin da tara");
+    });
+
+    QUnit.test("ten thousands", function (t) {
+      t.equal(convertToWords(10000), "goma dubu");
+      t.equal(convertToWords(11000), "goma sha ɗaya dubu");
+      t.equal(convertToWords(20000), "ashirin dubu");
+      t.equal(convertToWords(25000), "ashirin da biyar dubu");
+      t.equal(convertToWords(99999), "tsannin da tara dubu da ɗari tara da tsannin da tara");
+    });
+
+    QUnit.test("hundred thousands", function (t) {
+      t.equal(convertToWords(100000), "ɗari dubu");
+      t.equal(convertToWords(500000), "ɗari biyar dubu");
+      t.equal(convertToWords(999999), "ɗari tara da tsannin da tara dubu da ɗari tara da tsannin da tara");
+    });
+
+    QUnit.test("millions and above", function (t) {
+      t.equal(convertToWords(1000000), "miliyan");
+      t.equal(convertToWords(2000000), "biyu miliyan");
+      t.equal(convertToWords(1000000000), "biliyan");
+      t.equal(convertToWords(1000000000000), "tiriliyan");
+    });
+
+    QUnit.test("compound millions", function (t) {
+      t.equal(convertToWords(1500000), "miliyan da ɗari biyar dubu");
+      t.equal(convertToWords(1234567), "miliyan da ɗari biyu da talatin da huɗu dubu da ɗari biyar da sittin da bakwai");
+    });
+
+    QUnit.test("negative numbers", function (t) {
+      t.equal(convertToWords(-5), "ƙasa da sifili biyar");
+      t.equal(convertToWords(-11), "ƙasa da sifili goma sha ɗaya");
+      t.equal(convertToWords(-100), "ƙasa da sifili ɗari");
+      t.equal(convertToWords(-1000), "ƙasa da sifili dubu");
+    });
+
+    QUnit.test("decimal numbers", function (t) {
+      t.equal(convertToWords(0.5), "sifili digo biyar");
+      t.equal(convertToWords(0.25), "sifili digo biyu biyar");
+      t.equal(convertToWords(3.14), "uku digo ɗaya huɗu");
+      t.equal(convertToWords(10.5), "goma digo biyar");
+    });
+
+    QUnit.test("invalid inputs return empty string", function (t) {
+      t.equal(convertToWords(NaN), "");
+      t.equal(convertToWords(Infinity), "");
+      t.equal(convertToWords(-Infinity), "");
+    });
+
+    QUnit.test("non-number inputs", function (t) {
+      t.equal(convertToWords("hello"), "");
+    });
+
+    QUnit.module("translateHausa");
+
+    QUnit.test("translates display value", function (t) {
+      document.getElementById("result").value = "7";
+      const wordResult = document.getElementById("word-result");
+      const wordDisplay = document.getElementById("word-display");
+      translateHausa();
+      t.equal(wordResult.textContent, "bakwai");
+      t.equal(wordDisplay.style.display, "flex");
+    });
+
+    QUnit.test("hides on Error", function (t) {
+      document.getElementById("result").value = "Error";
+      const wordDisplay = document.getElementById("word-display");
+      wordDisplay.style.display = "flex";
+      translateHausa();
+      t.equal(wordDisplay.style.display, "none");
+    });
+  </script>
+</body>
+</html>

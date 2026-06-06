@@ -33,6 +33,16 @@
                     <input type="text" class="form-control" id="result" placeholder="0" disabled />
                   </div>
 
+                  <div class="word-display-area" id="word-display">
+                    <div>
+                      <span class="small-label">Hausa</span>
+                      <span id="word-result"></span>
+                    </div>
+                    <button class="btn" id="speak-btn" onclick="speakHausa()" title="Read aloud in Hausa" disabled>
+                      🔊
+                    </button>
+                  </div>
+
                   <div class="btn-grid">
                     <button class="btn btn-light" onclick="bracketToResult('(')">(</button>
                     <button class="btn btn-light" onclick="bracketToResult(')')">)</button>
@@ -68,6 +78,10 @@
                     <button class="btn btn-operator" onclick="operatorToResult('-')">−</button>
 
                     <button class="btn btn-equals" onclick="calculateResult()" style="grid-column: span 4;">=</button>
+                  </div>
+
+                  <div class="d-flex gap-2 justify-content-center mt-3">
+                    <button class="btn" id="hausa-btn" onclick="translateHausa()" title="Hausa">HA</button>
                   </div>
                 </div>
               </div>
