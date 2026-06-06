@@ -1,5 +1,4 @@
 version: 2
-
 updates:
   - package-ecosystem: "npm"
     directory: "/"
@@ -10,7 +9,11 @@ updates:
     groups:
       development-dependencies:
         dependency-type: "development"
-    labels: ["dependencies"]
+      production-dependencies:
+        dependency-type: "production"
+    labels:
+      - "dependencies"
+      - "automated"
     commit-message:
       prefix: "deps"
 
@@ -18,6 +21,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    labels: ["github-actions"]
+    labels:
+      - "github-actions"
+      - "automated"
     commit-message:
       prefix: "ci"

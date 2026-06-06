@@ -1,7 +1,7 @@
 # VUNA Calculator
 
-[![CI](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml)
-[![Deploy](https://github.com/<OWNER>/<REPO>/actions/workflows/deploy.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/deploy.yml)
+[![CI/CD](https://github.com/MamzaJibrin/VUNA-Calc-striped/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/MamzaJibrin/VUNA-Calc-striped/actions/workflows/ci-cd.yml)
+[![PR Check](https://github.com/MamzaJibrin/VUNA-Calc-striped/actions/workflows/pr-check.yml/badge.svg)](https://github.com/MamzaJibrin/VUNA-Calc-striped/actions/workflows/pr-check.yml)
 
 A web calculator built by set 2025/26 Software Engineering students.
 
@@ -11,7 +11,8 @@ A web calculator built by set 2025/26 Software Engineering students.
 |-------|------|---------|
 | Lint | ESLint + Stylelint | Every push & PR |
 | Test | QUnit + Playwright | Every push & PR |
-| Deploy | GitHub Pages | Push to `main` |
+| Security Audit | npm audit | Every push |
+| Docker Build | Docker BuildKit + GHCR | Every push |
 
 ## Development
 
@@ -30,5 +31,3 @@ Open `tests/index.html` in a browser, or run:
 ```bash
 npm test
 ```
-
-> Replace `<OWNER>/<REPO>` in badge URLs with your GitHub repository path.
