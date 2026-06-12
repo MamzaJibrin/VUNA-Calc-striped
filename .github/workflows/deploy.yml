@@ -5,35 +5,46 @@ on:
     branches: [main]
 
 jobs:
-  test:
-    name: Run Tests
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
 
-      - name: Install dependencies
-        run: npm ci
+  audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm audit --audit-level=high
 
-      - name: Run unit tests
-        run: npm test
+  test:
+    name: Run Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
 
   build-and-deploy:
     name: Build and Deploy
-    needs: test
+    needs: [test, audit]
     runs-on: ubuntu-latest
     environment: production
     steps:
       - uses: actions/checkout@v4
-
-      - name: Build Docker image
-        run: docker build -t calc-app .
-
+      - run: docker build -t calc-app .
       - name: Extract static files from image
         run: |
           mkdir -p dist
@@ -42,7 +53,6 @@ jobs:
           docker cp temp:/usr/share/nginx/html/calculator.html dist/
           docker cp temp:/usr/share/nginx/html/assets dist/
           docker rm temp
-
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

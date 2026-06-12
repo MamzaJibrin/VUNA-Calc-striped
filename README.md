@@ -10,9 +10,10 @@ A web calculator built by set 2025/26 Software Engineering students.
 | Stage | Tool | Trigger |
 |-------|------|---------|
 | Lint | ESLint + Stylelint | Every push & PR |
+| Security Audit | npm audit | Every push & PR |
 | Test | QUnit + Playwright | Every push & PR |
-| Security Audit | npm audit | Every push |
-| Docker Build | Docker BuildKit + GHCR | Every push |
+| Docker Build | Docker BuildKit | Every push to main |
+| FTP Deploy | SamKirkland/FTP-Deploy-Action | Every push to main |
 
 ## Development
 
