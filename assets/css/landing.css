@@ -1,0 +1,445 @@
+:root {
+  --brand-blue: #0d47a1;
+  --brand-accent: #00b8d4;
+  --brand-dark: #0a0e1a;
+  --brand-light: #e3f2fd;
+  --brand-cream: #f5f5f5;
+  --brand-text: #1a1a2e;
+  --brand-muted: #607d8b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--brand-cream);
+  color: var(--brand-text);
+  line-height: 1.6;
+}
+
+/* ─── Floating Calculator Button ─── */
+.float-calc {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  background: linear-gradient(135deg, #ff6f00, #e65100);
+  color: #fff;
+  padding: 0 1.2rem;
+  height: 54px;
+  border-radius: 27px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 30px rgba(230, 81, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.float-calc:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(230, 81, 0, 0.55);
+  color: #fff;
+}
+
+.float-calc-icon {
+  font-size: 1.3rem;
+}
+
+/* ─── Hero ─── */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0e1a 0%, #16213e 50%, #0d1b2a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 40%, rgba(0, 184, 212, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 60%, rgba(13, 71, 161, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 0%, rgba(0, 184, 212, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(0, 184, 212, 0.12);
+  border: 1px solid rgba(0, 184, 212, 0.25);
+  color: var(--brand-accent);
+  padding: 0.4rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -1px;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.hero h1 span {
+  color: var(--brand-accent);
+  display: inline-block;
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 20px rgba(0, 184, 212, 0.3); }
+  100% { text-shadow: 0 0 40px rgba(0, 184, 212, 0.6); }
+}
+
+.hero-tagline {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 600px;
+  margin: 1rem auto 2rem;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary-custom {
+  background: linear-gradient(135deg, var(--brand-accent), var(--brand-blue));
+  border: none;
+  color: #fff;
+  padding: 0.9rem 2.2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 184, 212, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary-custom:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 184, 212, 0.45);
+  color: #fff;
+}
+
+.btn-secondary-custom {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.9rem 2.2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-secondary-custom:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* ─── Section common ─── */
+.section {
+  padding: 5rem 0;
+}
+
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--brand-text);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--brand-muted);
+  max-width: 550px;
+  margin: 0 auto 3rem;
+  font-size: 1.05rem;
+}
+
+/* ─── About ─── */
+.about {
+  background: #fff;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.about-image {
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-accent));
+  border-radius: 24px;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6rem;
+  box-shadow: 0 20px 40px rgba(13, 71, 161, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 20px,
+    rgba(255, 255, 255, 0.05) 20px,
+    rgba(255, 255, 255, 0.05) 40px
+  );
+}
+
+.about-text h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--brand-text);
+  margin-bottom: 1rem;
+}
+
+.about-text p {
+  color: #455a64;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+/* ─── Cars / Fleet ─── */
+.cars {
+  background: var(--brand-cream);
+}
+
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.car-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+
+.car-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+}
+
+.car-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.car-card h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--brand-text);
+  margin-bottom: 0.4rem;
+}
+
+.car-desc {
+  color: var(--brand-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.car-price {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--brand-accent), var(--brand-blue));
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 0.3rem 1.2rem;
+  border-radius: 50px;
+}
+
+.car-price span {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* ─── Features ─── */
+.features {
+  background: #fff;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.feature-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--brand-light), #bbdefb);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 1.2rem;
+}
+
+.feature-card h5 {
+  font-weight: 700;
+  color: var(--brand-text);
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: var(--brand-muted);
+  font-size: 0.9rem;
+}
+
+/* ─── Contact ─── */
+.contact {
+  background: var(--brand-cream);
+}
+
+.contact-info {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-info p {
+  font-size: 1.1rem;
+  color: #455a64;
+  margin-bottom: 0.6rem;
+}
+
+.contact-info .address {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--brand-text);
+  margin-bottom: 0.5rem;
+}
+
+.contact-info .hours {
+  color: var(--brand-muted);
+}
+
+.contact-phone,
+.contact-email {
+  color: var(--brand-blue);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.contact-phone:hover,
+.contact-email:hover {
+  color: var(--brand-accent);
+  text-decoration: underline;
+}
+
+/* ─── Footer ─── */
+.footer {
+  background: var(--brand-dark);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 2.5rem 0;
+  text-align: center;
+}
+
+.footer a {
+  color: var(--brand-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer a:hover {
+  color: #4dd0e1;
+  text-decoration: underline;
+}
+
+.footer-brand {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.footer-brand span {
+  color: var(--brand-accent);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.8rem;
+  }
+
+  .hero-tagline {
+    font-size: 1.1rem;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about-image {
+    height: 250px;
+    font-size: 4rem;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+}

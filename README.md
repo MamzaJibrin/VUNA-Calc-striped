@@ -22,7 +22,7 @@ npm run lint
 npm test
 ```
 
-Open `index.html` in a browser or run `npx serve .` to start a local server.
+Open `index.html` (landing page) or `calculator.html` (the calculator) in a browser, or run `npx serve .` to start a local server.
 
 ## Testing
 

@@ -1,101 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculator</title>
+  <title>Logistic — Premium Car Rentals & Logistics</title>
   <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/landing.css" />
 </head>
-
 <body>
-  <!-- Theme Toggle Button -->
-  <button class="btn btn-outline-secondary theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()"
-    title="Toggle dark/light mode">
-    🌙
-  </button>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-6 col-md-6 col-sm-8">
-        <div class="border border-dotted border-3 rounded-3 p-3 mb-4 bg-white bg-opacity-50">
-          <h4 class="text-center group-header mb-0">VUNA CALCULATOR</h4>
-          <p class="text-center text-small text-muted">
-            <i>Created by set 2025/26 Software Engineering</i>
-          </p>
-          <!-- <i>Mamza Jibrin</i> -->
+
+  <!-- ═══════════════════ FLOATING CALCULATOR BUTTON ═══════════════════ -->
+  <a href="calculator.html" class="float-calc">
+    <span class="float-calc-icon">🧮</span>
+    <span class="float-calc-label">Calculator</span>
+  </a>
+
+  <!-- ═══════════════════════ HERO ═══════════════════════ -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Premium Car Rental Service</div>
+      <h1><span>Logistic</span></h1>
+      <p class="hero-tagline">
+        Drive your way — from economy to luxury, we've got the perfect ride for every journey.
+      </p>
+      <div class="hero-actions">
+        <a href="#fleet" class="btn-primary-custom">
+          Browse Our Fleet
+        </a>
+        <a href="#contact" class="btn-secondary-custom">
+          Get in Touch →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ ABOUT / FLEET ═══════════════════════ -->
+  <section class="section about" id="fleet">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image">
+          🚗✨
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card calculator-card">
-              <div class="card-body p-4">
-                <div class="calculator">
-                  <div class="display-container">
-                    <input type="text" class="form-control" id="result" placeholder="0" disabled />
-                  </div>
-
-                  <div class="word-display-area" id="word-display">
-                    <div>
-                      <span class="small-label">Hausa</span>
-                      <span id="word-result"></span>
-                    </div>
-                    <button class="btn" id="speak-btn" onclick="speakHausa()" title="Read aloud in Hausa" disabled>
-                      🔊
-                    </button>
-                  </div>
-
-                  <div class="btn-grid">
-                    <button class="btn btn-light" onclick="bracketToResult('(')">(</button>
-                    <button class="btn btn-light" onclick="bracketToResult(')')">)</button>
-                    <button class="btn btn-light" onclick="backspace()">←</button>
-
-                    <!-- Row trig -->
-                    <button class="btn btn-action" onclick="clearResult()">AC</button>
-
-                    <!-- Row 2 -->
-                    <button class="btn btn-light" onclick="appendToResult(7)">7</button>
-                    <button class="btn btn-light" onclick="appendToResult(8)">8</button>
-                    <button class="btn btn-light" onclick="appendToResult(9)">9</button>
-
-                    <!-- Row 3 -->
-                    <button class="btn btn-operator" onclick="operatorToResult('/')">÷</button>
-                    <button class="btn btn-light" onclick="appendToResult(4)">4</button>
-                    <button class="btn btn-light" onclick="appendToResult(5)">5</button>
-                    <button class="btn btn-light" onclick="appendToResult(6)">6</button>
-
-                    <!-- Row 4 -->
-                    <button class="btn btn-operator" onclick="operatorToResult('*')">×</button>
-                    <button class="btn btn-light" onclick="appendToResult(1)">1</button>
-                    <button class="btn btn-light" onclick="appendToResult(2)">2</button>
-                    <button class="btn btn-light" onclick="appendToResult(3)">3</button>
-
-                    <!-- Row 5 -->
-                    <button class="btn btn-operator" onclick="operatorToResult('+')">+</button>
-                    <button class="btn btn-light" onclick="appendToResult('.')">.</button>
-                    <button class="btn btn-light" onclick="appendToResult(0)">0</button>
-                    <button class="btn btn-operator" onclick="percentToResult('%')">%</button>
-                    
-                    <!-- Row 9 -->
-                    <button class="btn btn-operator" onclick="operatorToResult('-')">−</button>
-
-                    <button class="btn btn-equals" onclick="calculateResult()" style="grid-column: span 4;">=</button>
-                  </div>
-
-                  <div class="d-flex gap-2 justify-content-center mt-3">
-                    <button class="btn" id="hausa-btn" onclick="translateHausa()" title="Hausa">HA</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <script src="assets/js/bootstrap.min.js"></script>
-          <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-          <script src="assets/js/script.js"></script>
-          <button id="scroll-to-calculator" title="Back to Calculator">↑</button>
+        <div class="about-text">
+          <h3>Your Journey, Your Ride — We Deliver Too</h3>
+          <p>
+            At <strong>Logistic</strong>, we offer a diverse fleet of
+            well-maintained vehicles — from compact city cars to spacious
+            SUVs and premium luxury sedans. Whether you need a car for a
+            weekend getaway, business trip, or daily commute, we have you
+            covered.
+          </p>
+          <p>
+            Beyond car rentals, we also offer reliable logistics and delivery
+            services to move your goods safely and on time. Every vehicle is
+            thoroughly inspected, sanitised, and serviced before handover.
+            With transparent pricing, no hidden fees, and flexible terms,
+            we make transport hassle-free.
+          </p>
+          <a href="#cars" class="btn-primary-custom" style="display: inline-flex;">
+            See Our Cars
+          </a>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ CAR LISTINGS ═══════════════════════ -->
+  <section class="section cars" id="cars">
+    <div class="container">
+      <h2 class="section-title">Our Fleet</h2>
+      <p class="section-subtitle">
+        Choose from a wide range of vehicles to suit your style and budget.
+      </p>
+      <div class="cars-grid">
+        <div class="car-card">
+          <div class="car-icon">🚙</div>
+          <h4>Economy</h4>
+          <p class="car-desc">Toyota Corolla or similar — fuel-efficient and reliable for city driving.</p>
+          <div class="car-price">₦25,000<span>/day</span></div>
+        </div>
+        <div class="car-card">
+          <div class="car-icon">🚗</div>
+          <h4>Sedan</h4>
+          <p class="car-desc">Honda Accord or similar — comfortable ride with plenty of boot space.</p>
+          <div class="car-price">₦35,000<span>/day</span></div>
+        </div>
+        <div class="car-card">
+          <div class="car-icon">🚐</div>
+          <h4>SUV</h4>
+          <p class="car-desc">Toyota RAV4 or similar — spacious and powerful for any terrain.</p>
+          <div class="car-price">₦50,000<span>/day</span></div>
+        </div>
+        <div class="car-card">
+          <div class="car-icon">🏎️</div>
+          <h4>Luxury</h4>
+          <p class="car-desc">Mercedes-Benz E-Class or similar — premium comfort and style.</p>
+          <div class="car-price">₦95,000<span>/day</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ WHY US ═══════════════════════ -->
+  <section class="section features">
+    <div class="container">
+      <h2 class="section-title">Why Choose Logistic?</h2>
+      <p class="section-subtitle">
+        We go the extra mile to make your rental experience seamless.
+      </p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🧼</div>
+          <h5>Sanitised & Safe</h5>
+          <p>Every car is deep-cleaned and disinfected before each rental.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⛽</div>
+          <h5>Full Tank Policy</h5>
+          <p>Pick up with a full tank, return with a full tank — no surprises.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h5>Insurance Included</h5>
+          <p>Comprehensive insurance coverage comes standard with every rental.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📞</div>
+          <h5>24/7 Support</h5>
+          <p>Roadside assistance and customer support available around the clock.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ LOCATION / CONTACT ═══════════════════════ -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact Us</h2>
+      <p class="section-subtitle">Book your ride today — walk in, call, or reach out online.</p>
+      <div class="contact-info">
+        <div class="address">📍 15 Ibrahim Taiwo Road, Kaduna, Nigeria</div>
+        <p class="hours">🕐 Mon – Sat: 7:00 AM – 8:00 PM &nbsp;|&nbsp; Sun: 9:00 AM – 5:00 PM</p>
+        <p>📞 <a href="tel:+2348023456789" class="contact-phone">+234 802 345 6789</a></p>
+        <p>        ✉️ <a href="mailto:info@logistic.com" class="contact-email">info@logistic.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand"><span>Logistic</span></div>
+      <p style="margin-bottom: 1rem;">
+        Drive with confidence. 🚗
+      </p>
+      <p style="font-size: 0.85rem;">
+        &copy; 2025 Logistic. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
 </body>
-
 </html>
-

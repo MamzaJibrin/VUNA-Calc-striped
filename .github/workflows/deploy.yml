@@ -39,6 +39,7 @@ jobs:
           mkdir -p dist
           docker create --name temp calc-app
           docker cp temp:/usr/share/nginx/html/index.html dist/
+          docker cp temp:/usr/share/nginx/html/calculator.html dist/
           docker cp temp:/usr/share/nginx/html/assets dist/
           docker rm temp
 
