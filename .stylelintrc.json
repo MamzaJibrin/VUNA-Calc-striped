@@ -1,0 +1,17 @@
+{
+  "extends": "stylelint-config-standard",
+  "ignoreFiles": ["assets/css/bootstrap.min.css"],
+  "rules": {
+    "color-function-notation": null,
+    "alpha-value-notation": null,
+    "selector-pseudo-element-colon-notation": null,
+    "media-feature-range-notation": null,
+    "keyframes-name-pattern": null,
+    "no-descending-specificity": null,
+    "declaration-block-single-line-max-declarations": null,
+    "color-hex-length": null,
+    "comment-empty-line-before": null,
+    "rule-empty-line-before": null,
+    "no-duplicate-selectors": null
+  }
+}
