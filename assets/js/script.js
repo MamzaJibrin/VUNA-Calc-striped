@@ -197,6 +197,21 @@ function updateResult() {
 // 🌍 NUMBER TRANSLATION
 // ===============================
 
+const englishNumberWords = {
+  zero: "zero",
+  units: ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"],
+  teens: ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"],
+  tens: ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"],
+  hundred: "hundred",
+  thousand: "thousand",
+  million: "million",
+  billion: "billion",
+  trillion: "trillion",
+  and: "and",
+  negative: "negative",
+  point: "point",
+};
+
 const numberWords = {
   zero: "sifili",
   units: ["", "ɗaya", "biyu", "uku", "huɗu", "biyar", "shida", "bakwai", "takwas", "tara"],
@@ -287,10 +302,86 @@ function convertToWords(num) {
   return result.trim();
 }
 
+function convertToEnglishWords(num) {
+  if (typeof num !== "number" || isNaN(num) || !isFinite(num)) return "";
+
+  const w = englishNumberWords;
+  let isNegative = false;
+  if (num < 0) { isNegative = true; num = Math.abs(num); }
+
+  let decimalPart = null;
+  const str = String(num);
+  const dotIdx = str.indexOf(".");
+  const eIdx = str.indexOf("e");
+  if (dotIdx !== -1 && eIdx === -1) {
+    decimalPart = str.slice(dotIdx + 1);
+    num = parseInt(str.slice(0, dotIdx)) || 0;
+  } else if (eIdx !== -1) {
+    num = parseFloat(str);
+    if (!isFinite(num)) return "";
+  }
+
+  const scales = [
+    [1e12, w.trillion],
+    [1e9, w.billion],
+    [1e6, w.million],
+    [1e3, w.thousand],
+  ];
+
+  function convertInt(n) {
+    if (n === 0) return "";
+    for (const [divisor, name] of scales) {
+      if (n >= divisor) {
+        const q = Math.floor(n / divisor);
+        const r = n % divisor;
+        let part = q === 1 ? name : convertInt(q) + " " + name;
+        if (r > 0) part += " " + w.and + " " + convertInt(r);
+        return part;
+      }
+    }
+    let s = "";
+    if (n >= 100) {
+      const h = Math.floor(n / 100);
+      s += h === 1 ? w.hundred : w.units[h] + " " + w.hundred;
+      n %= 100;
+      if (n > 0) s += " " + w.and + " ";
+    }
+    if (n >= 20) {
+      s += w.tens[Math.floor(n / 10)];
+      n %= 10;
+      if (n > 0) s += " " + w.and + " ";
+    } else if (n >= 10) {
+      s += w.teens[n - 10];
+      n = 0;
+    }
+    if (n > 0) s += w.units[n];
+    return s;
+  }
+
+  let result;
+  if (num === 0 && decimalPart === null) {
+    result = w.zero;
+  } else {
+    result = convertInt(num) || "";
+  }
+
+  if (decimalPart !== null) {
+    if (!result) result = w.zero;
+    result += " " + w.point;
+    for (const ch of decimalPart) {
+      result += " " + (w.units[+ch] || w.units[0]);
+    }
+  }
+
+  if (isNegative) result = w.negative + " " + result;
+  return result.trim();
+}
+
 function translateHausa() {
   const display = document.getElementById("result");
   const wordDisplay = document.getElementById("word-display");
   const wordResult = document.getElementById("word-result");
+  const langLabel = document.getElementById("lang-label");
   const speakBtn = document.getElementById("speak-btn");
 
   const rawValue = display.value;
@@ -307,6 +398,7 @@ function translateHausa() {
 
   const words = convertToWords(num);
   wordResult.textContent = words || rawValue;
+  langLabel.textContent = "Hausa";
   wordDisplay.style.display = "flex";
   speakBtn.disabled = false;
 }
@@ -320,6 +412,55 @@ function speakHausa() {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "ha";
+    utterance.rate = 0.9;
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
+function translateEnglish() {
+  const display = document.getElementById("result");
+  const wordDisplay = document.getElementById("word-display");
+  const wordResult = document.getElementById("word-result");
+  const langLabel = document.getElementById("lang-label");
+  const speakBtn = document.getElementById("speak-btn");
+
+  const rawValue = display.value;
+  if (!rawValue || rawValue === "0" || rawValue === "Error") {
+    wordDisplay.style.display = "none";
+    return;
+  }
+
+  const num = parseFloat(rawValue);
+  if (isNaN(num)) {
+    wordDisplay.style.display = "none";
+    return;
+  }
+
+  const words = convertToEnglishWords(num);
+  wordResult.textContent = words || rawValue;
+  langLabel.textContent = "English";
+  wordDisplay.style.display = "flex";
+  speakBtn.disabled = false;
+}
+
+function speakCurrentLang() {
+  const langLabel = document.getElementById("lang-label");
+  if (langLabel.textContent === "English") {
+    speakEnglish();
+  } else {
+    speakHausa();
+  }
+}
+
+function speakEnglish() {
+  const wordResult = document.getElementById("word-result");
+  const text = wordResult.textContent;
+  if (!text) return;
+
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en";
     utterance.rate = 0.9;
     window.speechSynthesis.speak(utterance);
   }

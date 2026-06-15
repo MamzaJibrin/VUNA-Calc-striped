@@ -39,10 +39,10 @@
 
                   <div class="word-display-area" id="word-display">
                     <div>
-                      <span class="small-label">Hausa</span>
+                      <span class="small-label" id="lang-label">Hausa</span>
                       <span id="word-result"></span>
                     </div>
-                    <button class="btn" id="speak-btn" onclick="speakHausa()" title="Read aloud in Hausa" disabled>
+                    <button class="btn" id="speak-btn" onclick="speakCurrentLang()" title="Read aloud" disabled>
                       🔊
                     </button>
                   </div>
@@ -86,6 +86,7 @@
 
                   <div class="d-flex gap-2 justify-content-center mt-3">
                     <button class="btn" id="hausa-btn" onclick="translateHausa()" title="Hausa">HA</button>
+                    <button class="btn" id="eng-btn" onclick="translateEnglish()" title="English">EN</button>
                   </div>
                 </div>
               </div>
